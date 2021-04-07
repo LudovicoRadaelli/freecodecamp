@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="project3.css">
+    <title>Project 3</title>
+</head>
+<body>
+    <header id="header">
+        <div id="logo-nav-container">
+            <img id="header-img" src="M-logo.png">
+            <nav id="nav-bar">
+                <a href="#section1" class="nav-link"><img class="img-link" src="button1.png"></a>
+                <a href="#section2" class="nav-link"><img class="img-link" src="button2.png"></a>
+                <a href="#section3" class="nav-link"><img class="img-link" src="button3.png"></a>
+            </nav>
+        </div>
+        <img id="hr-img" src="hr.png">
+     </header>
+
+     <div id="section-container">
+        <section id="section1"> 
+            <p id="lesson-description">
+                Le lezioni sono erogate in forma asincrona tramite video e spiegazioni interattive.<br>
+                Gli argomenti coperti sono quelli del programma ministeriale della scuola secondaria di secondo grado, 
+                anche sarà dato spazio ad applicazioni che esulano dal programma standard
+            </p>
+            <video id="video" src="video/es121.mp4" controls></video>
+         </section>
+
+         <hr>
+
+         <div id="section2">
+             <p id="link-desctiption">
+                 Qui puoi trovare alcuni link fantastici sul mondo delle Explorable Explanation, 
+                 a cui si ispira l'intero progetto.
+            </p>
+            <ul id="link-list">
+                <li>
+                    <a href="https://ncase.me/">Il sito di Nicky Case</a>
+                </li>
+                <li>
+                    <a href="https://explorabl.es/">Explorable Explanation</a>
+                </li>
+                <li>
+                    <a href="https://www.ted.com/">TED</a>
+                </li>
+            </ul>
+         </div>
+         
+        <hr>
+
+         <section id="section3">
+             <p id="form-description">Per ulteriori informazioni lasciaci la tua email.</p>
+            <form action="https://www.freecodecamp.com/email-submit" id="form">
+                <label for="email" id="email-label">Email:</label>
+                <input type="email" name="email" placeholder="inserisci la tua email" id="email">
+                <input type="submit" value="Invia">
+            </form>
+         </section>
+     </div>
+         
+    
+</body>
+</html>
