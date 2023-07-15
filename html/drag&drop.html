@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script language="javascript" type="text/javascript" src="https://cdn.jsdelivr.net/npm/p5@1.4.0/lib/p5.min.js"></script> 
+    <link rel="stylesheet" href="../css/style.css">
+    <title>Multiple choice</title>
+</head>
+<style>
+    #div1, #div2, #div3, #div4, #div5, #div6 {
+    float: left;
+    width: 100px;
+    height: 35px;
+    margin: 10px;
+    padding: 10px;
+    border: 1px solid black;
+    }
+
+    * {
+        scroll-behavior: smooth;
+    }
+
+    .questionTitle {
+        color: black;
+    }
+    .questionBox {
+        border: 0.01rem lightgray solid;
+        padding: 1rem;
+    }
+
+    .column-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-evenly;
+        align-items: center;
+    }
+
+    .column {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+    .optionText {
+        width: calc(100% - 3rem);
+        word-wrap:break-word;
+    }
+
+    .numberOfTries {
+        margin: 1rem auto 0 auto;
+        font-size: 1rem;
+        color: gray;
+        display: none;
+    }
+
+    .esitoRisposta {
+        width: 100%;
+        text-align: center;
+    }
+
+    .showAnswer {
+        visibility: hidden;
+        display: block;
+        width: 100%;
+        margin-bottom: 0.4rem;
+        text-align: right;
+        font-size: 1rem;
+        color: rgb(102, 102, 255);
+        text-decoration-style: dotted;
+        text-decoration-color: rgb(102, 102, 255);
+        text-underline-offset: 0.2rem;
+    }
+
+    .showAnswer:hover {
+        cursor: default;
+        color: blue;
+        text-decoration-color: blue;
+    }
+
+    .answerContainer {
+        display: none;
+    }
+
+</style>
+<body>
+
+
+    <h1>Selezione compiti per casa</h1>
+    
+    <h3 class="questionTitle">Domanda 1</h3>
+    <div class="questionBox">
+        <p class="question">
+            De che squadra sei?
+        </p>
+        <br>
+        
+        <div class="column-container">
+            <div class="column">
+                <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <p draggable="true" ondragstart="drag(event)" id="drag1">Ciao</p>
+                </div>
+    
+                <div id="div2" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <p draggable="true" ondragstart="drag(event)" id="drag2">Cuore</p>
+                </div>
+    
+                <div id="div3" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <p draggable="true" ondragstart="drag(event)" id="drag3">Guerra</p>
+                </div>
+            </div>
+    
+            <div class="column">
+                <div id="div4" class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+        
+                <div id="div5" class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+    
+                <div id="div6" class="slot" ondrop="drop(event)" ondragover="allowDrop(event)"></div>
+            </div>
+        </div>
+        
+        <div class="numberOfTries">1/2 tentativi disponibili</div>
+
+        <div class="esitoRisposta"></div>
+
+        <u class="showAnswer" onclick="showAnswer(1)">Mostra la risposta</u>
+
+        <button type="button" class="submit" onclick="checkAnswer(1)" disabled>Invia risposta</button>
+
+        <div class="answerContainer">
+            
+            <br>
+            
+            <p>
+                Questa è la risposta giusta, perché così così e così.
+                Lo si può vedere facilmente attraverso questa formula
+                \[
+                    E = m^2 c
+                \]
+                Capito? Per maggiore chiarezza puoi vedere questo video
+            </p>
+
+            <br>
+            
+            <video src="" controls></video>
+
+        </div>
+        
+    </div>
+
+    <br>
+    <br>
+
+     <!-- ----------------------------------------------------------- -->
+    
+    
+
+    
+  
+
+<script>
+    function allowDrop(ev) {
+        //evito che l'elemento sia droppabile in slot già occupati
+        if(document.getElementById(ev.target.id).children.length === 0 && document.getElementById(ev.target.id).tagName !== `IMG`){
+            ev.preventDefault();
+        }
+    }
+    
+    function drag(ev) {
+        //registra l'id dell'elemento che è stato trascinato
+        ev.dataTransfer.setData("text", ev.target.id);
+        console.log(`drag: ${ev.target.id}`);
+    }
+    
+    function drop(ev) {
+        console.log(`drop: ${ev.target.id}`);
+        console.log(`children.length: ${document.getElementById(ev.target.id).children.length}`)
+        
+        //di norma non è possibile rilasciare un elemento in un altro, devo prevenire il comportamento standard
+        ev.preventDefault();
+        
+        //registo l'elemento oggetto del drop e gli appendo l'elemento trascinato
+        let data = ev.dataTransfer.getData("text");
+        ev.target.appendChild(document.getElementById(data));
+
+        enableSubmit(1)
+    }
+
+    let rightAnswer = [3, 2, 1]
+    let userAnswer = [undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined, undefined];
+    let maxNumberOfTries = [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+    let numberOfTries = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+    function enableSubmit(n) {
+        //riallineo il numero della domanda con il suo indice nei vettorri
+        n = n - 1
+
+        let questionBox = document.getElementsByClassName("questionBox")[n];
+        let button = questionBox.getElementsByClassName("submit")[0];
+        let slotArray = questionBox.getElementsByClassName("slot");
+        console.log(`\n${slotArray}`)
+
+        //definisco questa variabile booleana per registrarci se è vero che tutti gli slot sono pieni
+        let allSlotsFilled = true;
+        for(let i = 0; i < slotArray.length; i++) {
+            if(slotArray[i].childElementCount === 0) {
+                allSlotsFilled = false;
+                break;   
+            }
+        }
+
+        //non appena i tre slot sono pieni abilito il tasto submit relativo
+        if(allSlotsFilled) {
+            button.disabled = false;
+        } else{
+            button.disabled = true;
+        }
+    }
+
+    function checkAnswer(n) {
+        //riallineo il numero della domanda con il suo indice nei vettorri
+        n = n - 1
+
+        let questionBox = document.getElementsByClassName("questionBox")[n];
+        let slot = questionBox.getElementsByClassName("slot");
+        for(let i = 0; i < slot.length; i++) {
+            userAnswer[i] = slot[i].children[0].getAttribute(`id`);
+            userAnswer[i] = userAnswer[i].slice(-1)
+        }
+
+        numberOfTries[n]++;
+
+        //scorro tutti gli input della classe radioButton relativi alla domanda 
+        //non appena individuo quello selezionato, ne registro il valore nel vettore userAnswer
+        /* for(let i = 0; i < radioButton.length; i++) {
+            if(radioButton[i].checked === true) {
+                userAnswer[n] = radioButton[i].value;
+            }
+        } */
+
+        if(userAnswer[n] == rightAnswer[n]) {
+            //se la risposta è corretta inspessisco il riquadro e lo coloro di verde 
+            console.log(`DAJE FORTISSIMO`)
+            questionBox.getElementsByClassName("esitoRisposta")[0].innerHTML = `Risposta corretta ✔️`
+        } else {
+            //se la risposta è sbagliata inspessisco il riquadro e lo coloro di rosso
+            questionBox.getElementsByClassName("esitoRisposta")[0].innerHTML = `Risposta sbagliata ❌`
+        }
+
+        //e faccio comparire il numero di tentativi usati
+        questionBox.getElementsByClassName("numberOfTries")[0].style.display = "block"
+        questionBox.getElementsByClassName("numberOfTries")[0].innerHTML = `Hai usato ${numberOfTries[n]} dei ${maxNumberOfTries[n]} tentativi disponibili`
+
+        //se sono stati esauriti i tentativi possibili oppure
+        //è stata data la risposta corretta, do la possibilità di controllare la risposta
+        //e disabilitio il pulsante submit
+        if(numberOfTries[n] === maxNumberOfTries[n] || userAnswer[n] == rightAnswer[n]) {
+            questionBox.getElementsByClassName("showAnswer")[0].style.visibility = "visible"
+            questionBox.getElementsByClassName("submit")[0].disabled = true;
+        }
+    }
+
+    function showAnswer(n) {
+        //riallineo il numero della domanda con il suo indice nei vettorri
+        n = n - 1;
+        
+        //rendo visibile la risposta. Nelle righe //* e //** assegno un id provvisorio all'elemento
+        //in modo da poter scrollare la pagina fino ad esso. Successivamente elimino l'id provvisorio
+        let questionBox = document.getElementsByClassName("questionBox")[n];
+        let showAnswer = questionBox.getElementsByClassName("showAnswer")[0];
+        let answerContainer = questionBox.getElementsByClassName("answerContainer")[0]
+
+
+        if(showAnswer.innerHTML === `Mostra la risposta`) {
+            answerContainer.style.display = "block";
+            answerContainer.id = "answer"; //*
+            document.location.href = `#answer`
+            answerContainer.id = ""; //**
+            //cambio il nome dell'opzione
+            showAnswer.innerHTML = "Nascondi la risposta";
+        } else {
+            showAnswer.innerHTML = "Mostra la risposta";
+            answerContainer.style.display = "none"
+        }
+        
+    }
+</script>
+</body>
+</html>
+
